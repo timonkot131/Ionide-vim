@@ -196,38 +196,6 @@ function! GetFsharpIndent()
     if lline =~ '\(:\|=\|->\|<-\|(\|\[\|{\|{<\|\[|\|\[<\|\<\(begin\|do\|else\|fun\|function\|functor\|if\|initializer\|object\|private\|sig\|struct\|then\|try\)\|\<object\s*(.*)\)\s*$'
         let ind = ind + &sw
 
-        " Back to normal indent after lines ending with ';;':
-    elseif lline =~ ';;\s*$' && lline !~ '^\s*;;'
-        let ind = s:GetInd(v:lnum, s:letpat, s:letlim)
-
-        " Back to normal indent after lines ending with 'end':
-    elseif lline =~ '\<end\s*$'
-        let ind = s:FindPair(s:module, '','\<end\>')
-
-        " Back to normal indent after lines ending with 'in':
-    elseif lline =~ '\<in\s*$' && lline !~ '^\s*in\>'
-        let ind = s:FindPair('\<let\>', '', '\<in\>')
-
-        " Back to normal indent after lines ending with 'done':
-    elseif lline =~ '\<done\s*$'
-        let ind = s:FindPair('\<do\>', '','\<done\>')
-
-        " Back to normal indent after lines ending with '}' or '>}':
-    elseif lline =~ '\(\|>\)}\s*$'
-        let ind = s:FindPair('{', '','}')
-
-        " Back to normal indent after lines ending with ']', '|]' or '>]':
-    elseif lline =~ '\(\||\|>\)\]\s*$'
-        let ind = s:FindPair('\[', '','\]')
-
-        " Back to normal indent after comments:
-    elseif lline =~ '\*)\s*$'
-        call search('\*)', 'bW')
-        let ind = indent(searchpair('(\*', '', '\*)', 'bWn', 'synIDattr(synID(line("."), col("."), 0), "name") =~? "string"'))
-
-        " Back to normal indent after lines ending with ')':
-    elseif lline =~ ')\s*$'
-        let ind = s:FindPair('(', '',')')
 
         " If this is a multiline comment then align '*':
     elseif lline =~ '^\s*(\*' && line =~ '^\s*\*'
